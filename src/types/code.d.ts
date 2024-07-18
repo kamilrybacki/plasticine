@@ -14,5 +14,6 @@ export type CodeSnippet = {
 
 export type Decoration = {
   position: [number, number];
+  content: string;
   style: string;
 };

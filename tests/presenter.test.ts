@@ -3,8 +3,7 @@ import {
     it,
     expect,
 } from '@jest/globals';
-
-import { Presenter } from '../src/presenter';
+import { Presenter } from '@main/presenter';
 
 describe('Presenter structure', () => {
     const presenter = new Presenter('John Doe');

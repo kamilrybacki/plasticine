@@ -1,6 +1,9 @@
 {
   "dependencies": {
     "@types/node": "^20.14.11",
+    "ejs": "^3.1.10",
+    "satori": "^0.10.14",
+    "satori-html": "^0.3.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.3"
