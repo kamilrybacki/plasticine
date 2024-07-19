@@ -16,7 +16,7 @@ jobs:
       uses: docker://avtodev/markdown-lint:v1
       with:
         config: '/github/workspace/.github/assets/markdown-lint.yml'
-        args: './README.md LICENSE'
+        args: './README.md'
 
   lint-source:
     runs-on: ubuntu-latest
