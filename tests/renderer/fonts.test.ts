@@ -3,7 +3,7 @@ import {
     it,
     expect,
 } from '@jest/globals';
-import { GoogleFonts, _cache } from '@renderer/styling/fonts';
+import { GoogleFonts, _cache } from '@renderer/fonts';
 import { SatoriFontInfo } from '@typings/style';
 import { beforeEach } from 'node:test';
 
