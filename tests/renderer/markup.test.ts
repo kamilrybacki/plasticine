@@ -4,7 +4,7 @@ import {
     it,
     expect,
 } from '@jest/globals';
-import { GoogleFonts } from "@renderer/styling";
+import { GoogleFonts } from "@renderer/styling/fonts";
 import { SatoriFontInfo } from "@typings/style";
 
 const TEST_MARKUP_CONTENT = '<h1>Hello, World!</h1>';

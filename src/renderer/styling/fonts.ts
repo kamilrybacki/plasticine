@@ -9,7 +9,7 @@ class FontsCache {
 
   public save(key: string, font: SatoriFontInfo): void {
     if (!this._cache.has(key)) {
-      this._cache.set(font.name, font);
+      this._cache.set(key, font);
     }
   };
 
@@ -28,6 +28,14 @@ class FontsCache {
         this._cache.delete(key);
       }
     }
+  }
+
+  public forEach(callback: (value: SatoriFontInfo, key: string, map: FontsCacheMap) => void): void {
+    this._cache.forEach(callback);
+  }
+
+  public keys(): IterableIterator<string> {
+    return this._cache.keys();
   }
 };
 
@@ -57,6 +65,7 @@ export namespace GoogleFonts {
     weight: number = 400,
     style: string = 'normal'
   ): Promise<SatoriFontInfo> => {
+    const italicSuffix = style === 'italic' ? 'i' : '';
     return await asCached(
       async (fontUrl: string) => {
         return await fetch(
@@ -70,7 +79,7 @@ export namespace GoogleFonts {
           .then(async (text: string) => {
             const resource = text.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/);
             if (!resource) {
-              throw new Error('Font resource not found');
+              throw new Error(`Font ${family}:${weight}${italicSuffix} resource not found`);
             }
             return await fetch(resource[1] as string)
               .then((response) => response.arrayBuffer());
@@ -88,7 +97,7 @@ export namespace GoogleFonts {
             } as SatoriFontInfo;
           });
       }
-    )(`${API_URL}${family}`);
+    )(`${API_URL}${family.replace(/ /g, '+')}:${weight}${italicSuffix}`);
   };
 
   export const clearCache = (): void => {
