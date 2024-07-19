@@ -28,7 +28,7 @@ jobs:
         node-version: 16.x
     - name: Run ESLint
       run: |
-        npm ci --ignore-scripts
+        npm install
         npm run lint
 
   check-for-vulnerabilities:
