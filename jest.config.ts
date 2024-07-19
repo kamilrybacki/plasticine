@@ -15,7 +15,14 @@ const config: JestConfigWithTsJest = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
-  preset: 'ts-jest',
+  maxWorkers: '50%',
+  extensionsToTreatAsEsm: ['.ts'],
+  preset: 'ts-jest/presets/default-esm',
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.ts?$': ['ts-jest', { useESM: true }]
+  },
+  testPathIgnorePatterns: ['./dist']
 };
 
 export default config;

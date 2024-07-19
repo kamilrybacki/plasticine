@@ -1,16 +1,21 @@
-const satori = require('satori').default;
+import satori from 'satori';
+import { html } from 'satori-html';
+import { SatoriFontInfo } from '@typings/style';
+import { JSDOM } from 'jsdom';
 
-const convertToSvg = async (markup: string) => {
-  return await satori(markup, {
-    width: 600,
-    height: 400,
-    fonts: [
-      {
-        name: 'Inter',
-        data: await inter,
-        weight: 400,
-        style: 'normal',
-      },
-    ],
-  });
+export const markupToSvg = async (
+  markup: string,
+  size: { width: number; height: number },
+  fonts: SatoriFontInfo[]
+): Promise<SVGElement> => {
+  return satori(html`${markup}`, {
+    width: size.width,
+    height: size.height,
+    fonts: fonts as SatoriFontInfo[],
+  })
+    .then((svgSource: string) => {
+      return new JSDOM(svgSource)
+        .window.document
+        .querySelector('svg') as SVGElement;
+    });
 };

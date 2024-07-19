@@ -1,0 +1,67 @@
+name: "Code Analysis"
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.head_ref }}-code-analysis
+  cancel-in-progress: true
+
+jobs:
+  lint-markdown:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Lint Markdown files
+      uses: docker://avtodev/markdown-lint:v1
+      with:
+        config: '/github/workspace/.github/assets/markdown-lint.yml'
+        args: './README.md LICENSE'
+
+  lint-source:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: npm-${{ hashFiles('package-lock.json') }}
+        restore-keys: npm-
+    - name: Run ESLint
+      run: |
+        npm ci --ignore-scripts
+        npm run lint
+
+  check-for-vulnerabilities:
+    name: Scan repo for vulnerabilities
+    needs: [lint-markdown, lint-source]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'typescript', 'javascript' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        config-file: ./.github/assets/codeql-config.yml
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2

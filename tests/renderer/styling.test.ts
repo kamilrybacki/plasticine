@@ -16,7 +16,7 @@ describe('Google Fonts API adapter', () => {
   });
 
   TEST_FONT_COMBINATIONS.forEach((font) => {
-    it(`should be able to get a ${font} font from Google API`, async () => {
+    it(`should be able to get a ${font.name} font @ ${font.weight} weight from Google API`, async () => {
       const fetchedFont = await GoogleFonts.fetchFont(font.name, font.weight);
       expect(fetchedFont).toBeDefined();
       expect(fetchedFont.name).toEqual(font.name);
