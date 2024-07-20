@@ -1,8 +1,8 @@
-import { CodeSnapshots } from "./types/code"
+import { CodeSnapshot } from "./types/code"
 
 class Presenter {
   private _name: string;
-  private _snapshots: CodeSnapshots[] = [];
+  private _snapshots: CodeSnapshot[] = [];
 
   constructor(name: string) {
     this._name = name;
@@ -12,8 +12,12 @@ class Presenter {
     return this._name;
   }
 
-  get frames(): CodeSnapshots[] {
+  get frames(): CodeSnapshot[] {
     return this._snapshots;
+  }
+
+  addFrame(frame: CodeSnapshot): void {
+    this._snapshots.push(frame);
   }
 }
 

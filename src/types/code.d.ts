@@ -1,15 +1,15 @@
 
-export type CodeSnapshots = {
+export type CodeSnapshot = {
   title: string;
-  snippets: CodeSnippet[]
+  snippet: CodeSnippet
   language: string;
+  backgroundStyle: string;
+  decorations: Decoration[];
 };
 
 export type CodeSnippet = {
   code: string;
   notes: string;
-  backgroundStyle: string;
-  decorations: Decoration[];
 };
 
 export type Decoration = {

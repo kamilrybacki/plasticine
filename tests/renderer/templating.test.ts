@@ -18,8 +18,8 @@ describe('Templating module', () => {
         expect(template).toContain('Hello, Satori!');
     });
 
-    it('should be able to load an EJS template from a string', async () => {
-        const template = await templateTestCase('<h1>Hello, <%= name %>!</h1>');
-        expect(template).toContain('Hello, Satori!');
-    });
+  it('should be able to load an EJS template from a string', async () => {
+      const template = await templateTestCase('<h1>Hello, <%= name %>!</h1>');
+      expect(template).toContain('Hello, Satori!');
+  });
 });
