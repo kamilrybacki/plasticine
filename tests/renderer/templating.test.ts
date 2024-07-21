@@ -1,8 +1,4 @@
-import {
-    describe,
-    it,
-    expect,
-} from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import { EJS } from '@renderer/templating';
 
 const TEST_TEMPLATE_FILE = './tests/assets/test.ejs';

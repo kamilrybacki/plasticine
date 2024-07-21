@@ -1,8 +1,4 @@
-import {
-    describe,
-    it,
-    expect,
-} from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import { Presenter } from '@main/presenter';
 
 describe('Presenter structure', () => {

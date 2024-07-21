@@ -1,8 +1,7 @@
-import { CodeSnippetMetadata } from "@typings/code";
 import { EJS } from "@renderer/templating";
 import { applySyntaxHighlight } from "@renderer/markup";
-import { markupToSvg } from "@renderer/markup";
-import { CodeSnapshot, CodeSnippet, CodeSnippetNotes } from "@main/snippet";
+import { CodeSnapshot } from "@code/snapshot";
+import { CodeSnippet } from "@code/snippet";
 
 const DEFAULT_CODE_SNIPPET_LAYOUT = 'templates/code.ejs';
 
@@ -32,34 +31,20 @@ class Presenter {
 
   async renderSnippet(
     layout: string = DEFAULT_CODE_SNIPPET_LAYOUT,
-    content: CodeSnippetMetadata
+    source: string,
+    language: string
   ): Promise<CodeSnippet> {
-    const highlightedCode = applySyntaxHighlight(content.code, content.language);
+    const highlightedCode = applySyntaxHighlight(source, language);
     return await EJS
       .render(layout, {
         code: highlightedCode,
         name: this._name,
       })
       .then((renderedMarkup: string) => {
-        const newSnippet = CodeSnippet.empty();
-        newSnippet.updateMetadata({
-          language: content.language,
-          code: renderedMarkup
-        });
-        return newSnippet;
+        console.log(renderedMarkup);
+        return CodeSnippet.empty();
       });
   }
-
-  addNoteToSnippet(note: string, line: number, style?: string): void {
-    if (this._currentFrame) {
-      this._currentFrame.snippet.notes.add({
-        content: note,
-        line,
-        style: style || ''
-      });
-    }
-  }
-
 };
 
 export { Presenter };

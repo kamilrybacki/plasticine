@@ -1,8 +1,8 @@
 import satori from 'satori';
 import hljs from "highlight.js";
 import { html } from 'satori-html';
-import { SatoriFontInfo } from '@typings/style';
 import { JSDOM } from 'jsdom';
+import { SatoriFontInfo } from '@renderer/fonts';
 
 export const markupToSvg = async (
   markup: string,

@@ -1,10 +1,5 @@
-import {
-    describe,
-    it,
-    expect,
-} from '@jest/globals';
-import { GoogleFonts, _cache } from '@renderer/fonts';
-import { SatoriFontInfo } from '@typings/style';
+import { describe, it, expect } from '@jest/globals';
+import { GoogleFonts, SatoriFontInfo, _cache } from '@renderer/fonts';
 import { beforeEach } from 'node:test';
 
 const TEST_FONT_NAMES = ['Source Code Pro', 'Roboto', 'Fira Code']

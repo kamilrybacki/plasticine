@@ -1,14 +1,6 @@
-import { 
-  applySyntaxHighlight,
-  markupToSvg 
-} from "@renderer/markup";
-import {
-    describe,
-    it,
-    expect,
-} from '@jest/globals';
-import { GoogleFonts } from "@renderer/fonts";
-import { SatoriFontInfo } from "@typings/style";
+import { applySyntaxHighlight, markupToSvg } from "@renderer/markup";
+import { describe, it, expect } from '@jest/globals';
+import { GoogleFonts, SatoriFontInfo } from "@renderer/fonts";
 
 const TEST_MARKUP_CONTENT = '<h1>Hello, World!</h1>';
 const TEST_SVG_DIMENSIONS = { width: 100, height: 100 };

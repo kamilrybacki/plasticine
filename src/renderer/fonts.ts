@@ -1,4 +1,13 @@
-import { SatoriFontInfo, FontsCacheMap } from "@typings/style";
+export type SatoriFontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+export type SatoriFontStyle = 'normal' | 'italic';
+export type FontsCacheMap = Map<string, SatoriFontInfo>;
+export interface SatoriFontInfo {
+    data: Buffer | ArrayBuffer;
+    name: string;
+    weight?: SatoriFontWeight;
+    style?: SatoriFontStyle;
+    lang?: string;
+};
 
 class FontsCache {
   private _cache: FontsCacheMap = new Map();
