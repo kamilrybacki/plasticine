@@ -1,18 +1,15 @@
-
-export type CodeSnapshot = {
-  title: string;
-  snippet: CodeSnippet
+export type CodeSnippetMetadata = {
   language: string;
-  backgroundStyle: string;
-  decorations: Decoration[];
-};
-
-export type CodeSnippet = {
   code: string;
-  notes: string;
+}
+
+export type CodeSnippetNote = {
+  content: string;
+  line: number;
+  style?: string;
 };
 
-export type Decoration = {
+export type CodeSnapshotDecoration = {
   position: [number, number];
   content: string;
   style: string;
