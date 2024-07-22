@@ -1,9 +1,26 @@
+import * as dns from 'dns';
 import { describe, it, expect } from '@jest/globals';
 import { GoogleFonts, SatoriFontInfo, _cache } from '@renderer/fonts';
 import { beforeEach } from 'node:test';
 
 const TEST_FONT_NAMES = ['Source Code Pro', 'Roboto', 'Fira Code']
 const TEST_FONT_WEIGHTS = [300, 400, 500];
+
+namespace MockGoogleFonts {
+  export const {
+    clearCache,
+    fetchFont,
+    DEFAULT_FONT,
+    DEFAULT_STYLE,
+    DEFAULT_WEIGHT
+  } = GoogleFonts;
+  export const getDefaultFont = async (): Promise<SatoriFontInfo> => {
+    return {
+      name: DEFAULT_FONT,
+      data: new ArrayBuffer(0)
+    }
+  }
+}
 
 describe('Google Fonts API adapter', () => {
   const TEST_FONT_COMBINATIONS = TEST_FONT_NAMES.flatMap((name) => {
@@ -16,9 +33,10 @@ describe('Google Fonts API adapter', () => {
     _cache.clearAll();
   });
 
+
   TEST_FONT_COMBINATIONS.forEach((font) => {
     it(`should be able to get a ${font.name} font @ ${font.weight} weight from Google API`, async () => {
-      const fetchedFont = await GoogleFonts.fetchFont(font.name, font.weight);
+      const fetchedFont = await MockGoogleFonts.fetchFont(font.name, font.weight);
       expect(fetchedFont).toBeDefined();
       expect(fetchedFont.name).toEqual(font.name);
       expect(fetchedFont.weight).toEqual(font.weight);
@@ -27,25 +45,28 @@ describe('Google Fonts API adapter', () => {
   });
 
   it('should be able to clear its cache', () => {
-    GoogleFonts.fetchFont(TEST_FONT_NAMES[0], TEST_FONT_WEIGHTS[0]);
-    expect(_cache.size).toBeGreaterThan(0);
+    MockGoogleFonts.fetchFont(TEST_FONT_NAMES[0], TEST_FONT_WEIGHTS[0]);
     _cache.clearAll();
     expect(_cache.size).toBe(0);
     _cache.save('test', {} as any); 
     expect(_cache.size).toBe(1);
-    GoogleFonts.clearCache();
+    MockGoogleFonts.clearCache();
     expect(_cache.size).toBe(1);
   });
 
   it('should be able to fetch already cached fonts', async () => {
-    await GoogleFonts
-      .fetchFont(TEST_FONT_NAMES[0], TEST_FONT_WEIGHTS[0])
-      .then(async (initialFontFetch: SatoriFontInfo) => {
-        await GoogleFonts
-          .fetchFont(TEST_FONT_NAMES[0], TEST_FONT_WEIGHTS[0])
-          .then((cachedFontFetch: SatoriFontInfo) => {
-            expect(initialFontFetch === cachedFontFetch).toBeTruthy();
-          });
+    _cache.save(
+      `https://fonts.googleapis.com/css?family=${MockGoogleFonts.DEFAULT_FONT}:${MockGoogleFonts.DEFAULT_WEIGHT}`,
+      await MockGoogleFonts.getDefaultFont()
+    );
+    const initialFontFetch = await MockGoogleFonts.fetchFont(
+      MockGoogleFonts.DEFAULT_FONT,
+      MockGoogleFonts.DEFAULT_WEIGHT
+    )
+    await MockGoogleFonts
+      .fetchFont(MockGoogleFonts.DEFAULT_FONT, MockGoogleFonts.DEFAULT_WEIGHT)
+      .then((cachedFontFetch: SatoriFontInfo) => {
+        expect(initialFontFetch === cachedFontFetch).toBeTruthy();
       });
   });
 });

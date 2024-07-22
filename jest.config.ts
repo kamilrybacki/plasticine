@@ -22,7 +22,8 @@ const config: JestConfigWithTsJest = {
   transform: {
     '^.+\\.ts?$': ['ts-jest', { useESM: true }]
   },
-  testPathIgnorePatterns: ['./dist']
+  testPathIgnorePatterns: ['./dist'],
+  verbose: true
 };
 
 export default config;

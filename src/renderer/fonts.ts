@@ -62,17 +62,19 @@ const asCached = (fetcher: (url: string) => Promise<SatoriFontInfo>) => {
 }
 
 export namespace GoogleFonts {
-  const API_URL = 'https://fonts.googleapis.com/css?family=';
-  const FALLBACK_FONT = 'Roboto';
+  export const API_URL = 'https://fonts.googleapis.com/css?family=';
+  export const DEFAULT_FONT = 'Roboto';
+  export const DEFAULT_WEIGHT = 400;
+  export const DEFAULT_STYLE = 'normal';
   
   export const getDefaultFont = async (): Promise<SatoriFontInfo> => {
-    return await fetchFont(FALLBACK_FONT);
+    return await fetchFont(DEFAULT_FONT);
   }
 
   export const fetchFont = async (
     family: string,
-    weight: number = 400,
-    style: string = 'normal'
+    weight: number = DEFAULT_WEIGHT,
+    style: string = DEFAULT_STYLE
   ): Promise<SatoriFontInfo> => {
     const italicSuffix = style === 'italic' ? 'i' : '';
     return await asCached(
@@ -91,7 +93,10 @@ export namespace GoogleFonts {
               throw new Error(`Font ${family}:${weight}${italicSuffix} resource not found`);
             }
             return await fetch(resource[1] as string)
-              .then((response) => response.arrayBuffer());
+              .then((response) => response.arrayBuffer())
+              .catch((error) => {
+                throw Error(`Could not fetch font resource: ${error}`)
+              });
           })
           .catch((error) => {
             console.error(error);
