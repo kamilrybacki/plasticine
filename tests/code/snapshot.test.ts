@@ -13,5 +13,13 @@ describe('CodeSnapshot', () => {
     expect(emptySnapshot.snippet).toStrictEqual(
       CodeSnippet.empty()
     );
-  })
+  });
+
+  it('should be able to update its title', () => {
+    const newTitle = 'New Title';
+    const newSnapshot = CodeSnapshot.empty();
+
+    newSnapshot.changeTitle(newTitle);
+    expect(newSnapshot.title).toEqual(newTitle);
+  });
 });

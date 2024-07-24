@@ -26,5 +26,9 @@ export class CodeSnapshot {
 
   static empty(): CodeSnapshot {
     return new CodeSnapshot('', CodeSnippet.empty(), '', [])
-  }
+  };
+
+  changeTitle(newTitle: string): void {
+    this.title = newTitle;
+  };
 };

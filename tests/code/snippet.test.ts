@@ -35,7 +35,7 @@ describe('CodeSnippet', () => {
     const newCode = 'console.log("Hello, world!")';
 
     newSnippet.updateLines([newCode]);
-    const firstLine = newSnippet.lines[0];
+    const firstLine = newSnippet.render()[0];
 
     expect(firstLine.content).toEqual(newCode);
     expect(firstLine.lineNumber).toEqual(1);

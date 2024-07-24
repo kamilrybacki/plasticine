@@ -2,9 +2,12 @@ import { CodeLine } from "@code/line";
 import { CodeSnippetNotes, CodeSnippetNote } from "@code/notes";
 
 export class CodeSnippet {
-  lines: CodeLine[];
+  lines: string[];
   language: string;
   notes: CodeSnippetNotes;
+
+  private _lines: CodeLine[] = [];
+  private _wasUpdated: boolean = true;
 
   createCodeLines(lines: string[]): CodeLine[] {
     return lines
@@ -19,7 +22,7 @@ export class CodeSnippet {
     notes: CodeSnippetNotes
   ) {
     this.notes = notes;
-    this.lines = this.createCodeLines(lines);
+    this.lines = lines;
     this.language = language;
   }
 
@@ -32,8 +35,17 @@ export class CodeSnippet {
   };
 
   updateLines(newLines: string[]): void {
-    this.lines = this.createCodeLines(newLines);
+    this.lines = newLines;
+    this._wasUpdated = true;
   };
+
+  render(): CodeLine[] {
+    if (this._wasUpdated) {
+      this._lines = this.createCodeLines(this.lines);
+      this._wasUpdated = false;
+    }
+    return this._lines;
+  }
 
   addNote(newNote: CodeSnippetNote): number {
     return this.notes.add(newNote);
