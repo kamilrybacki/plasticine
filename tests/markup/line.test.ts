@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { CodeLine, DEFAULT_SPACES_PER_INDENT } from '@code/line';
+import { CodeLine, DEFAULT_SPACES_PER_INDENT } from '@main/markup/line';
 
 const TEST_INDENTED_LINE_CASES = {
   ' BEGIN': 0,

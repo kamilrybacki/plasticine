@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { CodeSnippetNote, CodeSnippetNotes } from '@code/notes';
+import { CodeSnippetNote, CodeSnippetNotes } from '@main/markup/notes';
 import { beforeEach } from 'node:test';
 
 describe('CodeSnippetNotes', () => {

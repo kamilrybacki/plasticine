@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
-import { CodeSnapshot } from '@code/snapshot';
-import { CodeSnippet } from '@code/snippet';
+import { CodeSnapshot } from '@main/markup/snapshot';
+import { CodeSnippet } from '@main/markup/snippet';
 
 describe('CodeSnapshot', () => {
   it('should be able to create its empty instance', () => {

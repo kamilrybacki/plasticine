@@ -1,7 +1,6 @@
-import { EJS } from "@renderer/templating";
-import { applySyntaxHighlight } from "@renderer/markup";
-import { CodeSnapshot } from "@code/snapshot";
-import { CodeSnippet } from "@code/snippet";
+import { EJS } from "@markup/ejs";
+import { CodeSnapshot } from "@main/markup/snapshot";
+import { CodeSnippet } from "@main/markup/snippet";
 
 const DEFAULT_CODE_SNIPPET_LAYOUT = 'templates/code.ejs';
 
@@ -34,7 +33,7 @@ class Presenter {
     source: string,
     language: string
   ): Promise<CodeSnippet> {
-    const highlightedCode = applySyntaxHighlight(source, language);
+    const highlightedCode = CodeSnippet.applyHighlighting(source, language);
     return await EJS
       .render(layout, {
         code: highlightedCode,

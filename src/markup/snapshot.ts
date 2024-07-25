@@ -1,4 +1,4 @@
-import { CodeSnippet } from "@code/snippet";
+import { CodeSnippet } from "@main/markup/snippet";
 
 export type CodeSnapshotDecoration = {
   position: [number, number];
@@ -22,7 +22,7 @@ export class CodeSnapshot {
     this.snippet = snippet;
     this.background = background;
     this.decorations = decorations;
-  }
+  };
 
   static empty(): CodeSnapshot {
     return new CodeSnapshot('', CodeSnippet.empty(), '', [])

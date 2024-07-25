@@ -1,10 +1,10 @@
 import { describe, it, expect } from '@jest/globals';
-import { EJS } from '@renderer/templating';
+import { EJS } from '@markup/ejs';
 
 const TEST_TEMPLATE_FILE = './tests/assets/test.ejs';
 const TEST_TEMPLATING_DATA = { name: 'Satori' };
 
-describe('Templating module', () => {
+describe('EJS templating module', () => {
   const templateTestCase = async (template: string): Promise<string> => {
     return await EJS.render(template, TEST_TEMPLATING_DATA);
   };

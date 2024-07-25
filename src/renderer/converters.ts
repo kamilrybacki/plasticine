@@ -1,5 +1,4 @@
 import satori from 'satori';
-import hljs from "highlight.js";
 import { html } from 'satori-html';
 import { JSDOM } from 'jsdom';
 import { SatoriFontInfo } from '@renderer/fonts';
@@ -19,14 +18,4 @@ export const markupToSvg = async (
         .window.document
         .querySelector('svg') as SVGElement;
     });
-};
-
-export const applySyntaxHighlight = (
-  source: string,
-  language: string
-): string => {
-  return hljs
-    .highlight(source, {
-      language: language
-     }).value;
 };

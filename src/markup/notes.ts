@@ -1,4 +1,4 @@
-import { CodeLineHash } from "@code/line";
+import { CodeLineHash } from "@main/markup/line";
 import { hashFromString } from "@main/utils";
 
 export type CodeSnippetNoteHash = number;

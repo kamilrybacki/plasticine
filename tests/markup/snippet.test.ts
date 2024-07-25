@@ -1,23 +1,22 @@
 import { describe, it, expect } from '@jest/globals';
-import { CodeSnippet } from '@code/snippet';
-import { CodeSnippetNotes } from '@code/notes';
+import { CodeSnippet, FALLBACK_LANGUAGE } from '@main/markup/snippet';
+import { CodeSnippetNotes } from '@main/markup/notes';
 
 describe('CodeSnippet', () => {
-  const currentTime: string = new Date().toLocaleDateString();
+  const currentCode: string = new Date().toLocaleDateString();
   const testLanguage: string = 'python'
-  const currentCode: string = currentTime;
 
   it('should be able to create its empty instance', () => {
     const emptySnippet = CodeSnippet.empty();
 
     expect(emptySnippet).toBeDefined();
-    expect(emptySnippet.language).toStrictEqual('');
+    expect(emptySnippet.language).toStrictEqual(FALLBACK_LANGUAGE);
     expect(emptySnippet.lines).toStrictEqual([]);
     expect(emptySnippet.notes.size).toEqual(0);
   });
 
   const makeTestSnippet = (): CodeSnippet => new CodeSnippet(
-    [currentCode],
+    currentCode,
     testLanguage,
     new CodeSnippetNotes()
   );
@@ -30,14 +29,25 @@ describe('CodeSnippet', () => {
     expect(newSnippet.language).toEqual(newLanguage);
   });
 
+  it("should be able to apply syntax highlighting to a code snippet", () => {
+    const source = 'const name = "Satori";';
+    const language = "javascript";
+    const highlightedSource = CodeSnippet.applyHighlighting(source, language);
+
+    expect(highlightedSource).toContain("const");
+    expect(highlightedSource).toContain("name");
+    expect(highlightedSource).toContain("Satori");
+  });
+
   it('should be able to update its code', () => {
     const newSnippet = makeTestSnippet();
     const newCode = 'console.log("Hello, world!")';
+    const expectedCode = CodeSnippet.applyHighlighting(newCode, testLanguage);
 
-    newSnippet.updateLines([newCode]);
+    newSnippet.update(newCode);
     const firstLine = newSnippet.render()[0];
 
-    expect(firstLine.content).toEqual(newCode);
+    expect(firstLine.content).toEqual(expectedCode);
     expect(firstLine.lineNumber).toEqual(1);
   });
 });

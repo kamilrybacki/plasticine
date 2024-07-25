@@ -1,4 +1,4 @@
-import { applySyntaxHighlight, markupToSvg } from "@renderer/markup";
+import { markupToSvg } from "@renderer/converters";
 import { describe, it, expect } from '@jest/globals';
 import { GoogleFonts, SatoriFontInfo } from "@renderer/fonts";
 
@@ -27,15 +27,4 @@ describe('Markup to SVG converter', () => {
         )
       });
     });
-});
-
-describe("Highlighter module", () => {
-  it("should be able to apply syntax highlighting to a code snippet", () => {
-    const source = `const name = "Satori";`;
-    const language = "javascript";
-    const highlightedSource = applySyntaxHighlight(source, language);
-    expect(highlightedSource).toContain("const");
-    expect(highlightedSource).toContain("name");
-    expect(highlightedSource).toContain("Satori");
-  });
 });
