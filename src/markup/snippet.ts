@@ -18,10 +18,9 @@ export class CodeSnippet {
     notes: CodeSnippetNotes
   ) {
     this.notes = notes;
-    this.lines = CodeSnippet
+    this.lines = source.length > 0 ? CodeSnippet
       .applyHighlighting(source, language)
-      .split('\n')
-      .filter((line: string) => line.length > 0);
+      .split('\n') : [];
     this.language = language;
   };
 
