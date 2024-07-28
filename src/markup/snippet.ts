@@ -20,7 +20,8 @@ export class CodeSnippet {
     this.notes = notes;
     this.lines = CodeSnippet
       .applyHighlighting(source, language)
-      .split('\n');
+      .split('\n')
+      .filter((line: string) => line.length > 0);
     this.language = language;
   };
 
