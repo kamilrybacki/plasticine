@@ -31,25 +31,41 @@ describe('Markup converters', () => {
     });
 });
 
-// describe('SVG converters', () => {
-//   const TEST_SVG = fs.readFileSync('tests/assets/test.svg', 'utf-8');
-//   const DOM = new JSDOM(TEST_SVG);
+describe('SVG converters', () => {
+  const TEST_SVG_SOURCE = fs.readFileSync('tests/assets/test.svg', 'utf-8');
+  const TEST_SVG = new JSDOM(TEST_SVG_SOURCE)
+    .window.document
+    .querySelector('svg') as SVGElement;
 
-//   it('should be able to convert to data URL', () => {
-//     const svgElement = DOM.window.document.querySelector('svg') as SVGElement;
-    
-//     const svgDimensions = {
-//       width: parseInt(svgElement.getAttribute('width') || '0'),
-//       height: parseInt(svgElement.getAttribute('height') || '0')
-//     };
-//     const dataURL = SVG.toDataURL(svgElement);
-//     expect(dataURL).toBeDefined();
-//     expect(dataURL.startsWith('data:image/svg+xml,')).toBeTruthy();
+  it('should be able to convert to data URL', () => {
+    const dataURL = SVG.toDataURL(TEST_SVG);
+    expect(dataURL).toBeDefined();
+    expect(dataURL.startsWith('data:image/svg+xml,')).toBeTruthy();
 
-//     const imageWithSVG = new Image();
-//     imageWithSVG.src = dataURL;
-//     expect(imageWithSVG).toBeDefined();
-//     expect(imageWithSVG.width).toBe(svgDimensions.width);
-//     expect(imageWithSVG.height).toBe(svgDimensions.height);
-//   });
-// });
+    const decodedDataURLContent = decodeURIComponent(
+      dataURL.split(',')[1]
+    );
+    const decodedSVGElement = new JSDOM(decodedDataURLContent)
+      .window.document
+      .querySelector('svg') as SVGElement;
+
+    const isDimensionDifferenceZero = ['width', 'height']
+      .map((dimensionName: string) => {
+        const decoded = parseInt(
+          decodedSVGElement.getAttribute(dimensionName) || '0'
+        );
+        const original = parseInt(
+          TEST_SVG.getAttribute(dimensionName) || '1'
+        );
+        return decoded - original;
+      })
+      .every((difference: number) => difference == 0);
+    expect(isDimensionDifferenceZero).toBeTruthy();
+    expect(TEST_SVG.innerHTML).toEqual(decodedSVGElement.innerHTML);
+  });
+
+  // it('should be able to convert to PNG', () => {
+  //   const png = SVG.toPNG(TEST_SVG);
+  //   expect(png).toBeTruthy()
+  // });
+});

@@ -2,6 +2,7 @@ import satori from 'satori';
 import { html } from 'satori-html';
 import { JSDOM } from 'jsdom';
 import { SatoriFontInfo } from '@renderer/fonts';
+import { createCanvas, Image } from 'canvas';
 
 export namespace Markup {
   export const toSVG = async (
@@ -27,21 +28,16 @@ export namespace SVG {
     return `data:image/svg+xml,${encodeURIComponent(svg.outerHTML)}`;
   }
 
-  export const toPNG = async (svg: SVGElement): Promise<string> => {
-    const canvas = new JSDOM().window.document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    canvas.width = parseInt(svg.getAttribute('width') || '0');
-    canvas.height = parseInt(svg.getAttribute('height') || '0');
-
-    const image = new Image();
-    image.src = toDataURL(svg);
-
-    return new Promise((resolve) => {
-      image.onload = () => {
-        context?.drawImage(image, 0, 0);
-        resolve(canvas.toDataURL('image/png'));
-      }
-    });
+  export const toPNG = async (svg: SVGElement): Promise<Buffer> => {
+    const canvas = createCanvas(
+      parseInt(svg.getAttribute('width') || '0'),
+      parseInt(svg.getAttribute('height') || '0')
+    );
+    const svgAsImage = new Image();
+    svgAsImage.src = toDataURL(svg);
+    canvas
+      .getContext('2d')
+      .drawImage(svgAsImage, 0, 0);
+    return canvas.toBuffer();
   }
 };
