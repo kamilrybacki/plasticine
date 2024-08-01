@@ -1,13 +1,11 @@
 import hljs from "highlight.js";
 import { CodeLine } from "@main/markup/line";
-import { CodeSnippetNotes, CodeSnippetNote } from "@main/markup/notes";
 
 export const FALLBACK_LANGUAGE = 'plaintext';
 
 export class CodeSnippet {
   lines: string[];
   language: string;
-  notes: CodeSnippetNotes;
 
   private _lines: CodeLine[] = [];
   private _wasUpdated: boolean = true;
@@ -15,9 +13,7 @@ export class CodeSnippet {
   constructor(
     source: string,
     language: string,
-    notes: CodeSnippetNotes
   ) {
-    this.notes = notes;
     this.lines = source.trim().length > 0 ? CodeSnippet
       .applyHighlighting(source, language)
       .split('\n') : [];
@@ -37,7 +33,7 @@ export class CodeSnippet {
   };
 
   static empty(): CodeSnippet {
-    return new CodeSnippet('', FALLBACK_LANGUAGE, new CodeSnippetNotes());
+    return new CodeSnippet('', FALLBACK_LANGUAGE);
   };
 
   changeLanguage(newLanguage: string): void {
@@ -65,10 +61,4 @@ export class CodeSnippet {
         new CodeLine(index + 1, content)
       ));
   }
-
-  addNote(newNote: CodeSnippetNote): number {
-    return this.notes.add(newNote);
-  };
 };
-
-

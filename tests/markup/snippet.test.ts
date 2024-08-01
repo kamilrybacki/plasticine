@@ -1,6 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
 import { CodeSnippet, FALLBACK_LANGUAGE } from '@main/markup/snippet';
-import { CodeSnippetNotes } from '@main/markup/notes';
 
 describe('CodeSnippet', () => {
   const currentCode: string = new Date().toLocaleDateString();
@@ -12,13 +11,11 @@ describe('CodeSnippet', () => {
     expect(emptySnippet).toBeDefined();
     expect(emptySnippet.language).toStrictEqual(FALLBACK_LANGUAGE);
     expect(emptySnippet.lines).toStrictEqual([]);
-    expect(emptySnippet.notes.size).toEqual(0);
   });
 
   const makeTestSnippet = (): CodeSnippet => new CodeSnippet(
     currentCode,
     testLanguage,
-    new CodeSnippetNotes()
   );
 
   it('should be able to update its language info', () => {

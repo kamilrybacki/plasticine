@@ -32,6 +32,8 @@ describe('Markup converters', () => {
 });
 
 describe('SVG converters', () => {
+  const FIRST_EIGHT_BYTES_OF_PNG = 'iVBORw0KGgo=';
+  const TEST_SVG_PNG_SOURCE = fs.readFileSync('tests/assets/test.png', 'base64');
   const TEST_SVG_SOURCE = fs.readFileSync('tests/assets/test.svg', 'utf-8');
   const TEST_SVG = new JSDOM(TEST_SVG_SOURCE)
     .window.document
@@ -64,8 +66,14 @@ describe('SVG converters', () => {
     expect(TEST_SVG.innerHTML).toEqual(decodedSVGElement.innerHTML);
   });
 
-  // it('should be able to convert to PNG', () => {
-  //   const png = SVG.toPNG(TEST_SVG);
-  //   expect(png).toBeTruthy()
-  // });
+  it('should be able to convert to PNG', async () => {
+    const png = await SVG.toPNG(TEST_SVG);
+    const firstEightBytes = Buffer
+      .from(png, 'base64')
+      .subarray(0, 8)
+      .toString('base64');
+    expect(firstEightBytes)
+      .toBe(FIRST_EIGHT_BYTES_OF_PNG);
+    expect(png).toEqual(TEST_SVG_PNG_SOURCE);
+  });
 });
