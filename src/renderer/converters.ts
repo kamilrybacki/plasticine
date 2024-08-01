@@ -38,8 +38,6 @@ export namespace SVG {
     )
       .then((svgImage) => {
         const canvasContext = canvas.getContext('2d');
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        canvasContext.fillStyle = 'hsla(0, 0%, 100%, 0)';
         canvasContext
           .drawImage(svgImage, 0, 0);
         return canvas

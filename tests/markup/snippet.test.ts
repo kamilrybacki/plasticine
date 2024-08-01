@@ -3,7 +3,7 @@ import { CodeSnippet, FALLBACK_LANGUAGE } from '@main/markup/snippet';
 
 describe('CodeSnippet', () => {
   const currentCode: string = new Date().toLocaleDateString();
-  const testLanguage: string = 'python'
+  const testLanguage: string = 'python';
 
   it('should be able to create its empty instance', () => {
     const emptySnippet = CodeSnippet.empty();
