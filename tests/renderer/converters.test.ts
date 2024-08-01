@@ -67,13 +67,19 @@ describe('SVG converters', () => {
   });
 
   it('should be able to convert to PNG', async () => {
-    const png = await SVG.toPNG(TEST_SVG);
+    const convertedSVG = await SVG.toPNG(TEST_SVG);
     const firstEightBytes = Buffer
-      .from(png, 'base64')
+      .from(convertedSVG, 'base64')
       .subarray(0, 8)
       .toString('base64');
-    
     expect(firstEightBytes).toEqual(FIRST_EIGHT_BYTES_OF_PNG);
-    expect(png).toEqual(TEST_SVG_PNG_SOURCE);
+
+    const originalSourceBytes = Buffer.from(TEST_SVG_PNG_SOURCE);
+    const convertedSVGBytes = Buffer.from(convertedSVG);
+
+    expect(originalSourceBytes.length).toEqual(convertedSVGBytes.length);
+    expect(
+      originalSourceBytes.equals(convertedSVGBytes)
+    ).toBeTruthy();
   });
 });
