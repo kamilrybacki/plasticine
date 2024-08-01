@@ -72,8 +72,7 @@ describe('SVG converters', () => {
       .from(png, 'base64')
       .subarray(0, 8)
       .toString('base64');
-    expect(firstEightBytes)
-      .toBe(FIRST_EIGHT_BYTES_OF_PNG);
+    expect(firstEightBytes).toEqual(FIRST_EIGHT_BYTES_OF_PNG);
     expect(png).toEqual(TEST_SVG_PNG_SOURCE);
   });
 });
