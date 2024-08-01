@@ -40,7 +40,6 @@ class Presenter {
         name: this._name,
       })
       .then((renderedMarkup: string) => {
-        console.log(renderedMarkup);
         return CodeSnippet.empty();
       });
   }
