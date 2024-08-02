@@ -1,12 +1,19 @@
 import * as Diff from 'diff';
 
-export const getDifferenceBetweenSources = (before: string, after: string): [string, number][] => {
+export type Difference = {
+  text: string
+  changed: boolean
+}
+
+export const getDifferenceBetweenSources = (before: string, after: string): Difference[] => {
   return Diff
     .diffChars(before, after)
-    .map((difference: Diff.Change) => [
-      difference.removed ? '' : difference.value,
-      (difference.removed || difference.added) ? 1 : 0
-    ])
+    .map((difference: Diff.Change) => { 
+      return {
+        text: difference.removed ? '' : difference.value,
+        changed: !!(difference.removed || difference.added)
+      } as Difference
+    });
 };
 
 export const hashFromString = (source: string): number => {

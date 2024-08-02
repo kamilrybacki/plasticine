@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { hashFromString, getDifferenceBetweenSources } from '@main/utils';
+import { hashFromString, Difference, getDifferenceBetweenSources } from '@main/utils';
 
 describe('Hashing from string', () => {
   const TEST_STRING = new Date().toUTCString();
@@ -22,22 +22,34 @@ describe('Differences between texts', () => {
   const TEST_ACCENT_CHAR = '!';
 
   it('should return empty array for unchanged text', () => {
-    const sameTextDiff = getDifferenceBetweenSources(TEST_TEXT, TEST_TEXT);
-    expect(sameTextDiff.length).toEqual(1);
-    expect(sameTextDiff.pop()?.[0]).toEqual(TEST_TEXT);
+    const sameTextDifferences= getDifferenceBetweenSources(TEST_TEXT, TEST_TEXT);
+    expect(sameTextDifferences.length).toEqual(1);
+    expect(sameTextDifferences.slice(-1).pop()?.text).toEqual(TEST_TEXT);
   });
 
+  const checkDifferences = (
+    firstText: string,
+    secondText: string,
+    expectedLength: number,
+    expectedAccentCharacterPosition: number
+  ) => {
+    const differences = getDifferenceBetweenSources(firstText, secondText);
+    expect(differences.length).toEqual(expectedLength);
+    expect(
+      differences
+        .at(expectedAccentCharacterPosition)?.text
+    ).toEqual(TEST_ACCENT_CHAR);
+  };
+
   it('should return differences between the ends of the text', () => {
-    const newText = TEST_TEXT + TEST_ACCENT_CHAR;
-    const diff = getDifferenceBetweenSources(TEST_TEXT, newText);
-    expect(diff.length).toEqual(2);
-    expect(diff.pop()?.[0]).toEqual(TEST_ACCENT_CHAR);
+    checkDifferences(TEST_TEXT, TEST_TEXT + TEST_ACCENT_CHAR, 2, -1);
   });
 
   it('should return differences between the beginnings of the text', () => {
-    const newText = TEST_ACCENT_CHAR + TEST_TEXT;
-    const diff = getDifferenceBetweenSources(TEST_TEXT, newText);
-    expect(diff.length).toEqual(2);
-    expect(diff.pop()?.[0]).toEqual(TEST_TEXT);
+    checkDifferences(TEST_TEXT, TEST_ACCENT_CHAR + TEST_TEXT, 2, 0);
+  });
+
+  it('should return differences between the middle of the text', () => {
+    checkDifferences(TEST_TEXT, TEST_TEXT.slice(0, 5) + TEST_ACCENT_CHAR + TEST_TEXT.slice(5), 3, 1);
   });
 });
