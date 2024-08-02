@@ -34,10 +34,12 @@ describe('Differences between texts', () => {
     expectedAccentCharacterPosition: number
   ) => {
     const differences = getDifferenceBetweenSources(firstText, secondText);
+    console.debug(differences);
     expect(differences.length).toEqual(expectedLength);
     expect(
       differences
         .at(expectedAccentCharacterPosition)?.text
+        .trim()
     ).toEqual(TEST_ACCENT_CHAR);
   };
 
@@ -51,5 +53,41 @@ describe('Differences between texts', () => {
 
   it('should return differences between the middle of the text', () => {
     checkDifferences(TEST_TEXT, TEST_TEXT.slice(0, 5) + TEST_ACCENT_CHAR + TEST_TEXT.slice(5), 3, 1);
+  });
+
+  it('should support multiline text', () => {
+    const multilineBeforeText = `
+      ${TEST_TEXT}
+      ${TEST_TEXT}
+      ${TEST_TEXT}
+    `;
+    const multilineAfterText = `
+      ${TEST_TEXT}
+      ${TEST_ACCENT_CHAR}
+      ${TEST_TEXT}
+    `;
+    checkDifferences(multilineBeforeText, multilineAfterText, 4, 2);
+    const anotherMultilineAfterText = `
+      ${TEST_TEXT}
+      ${TEST_TEXT}
+      ${TEST_ACCENT_CHAR}
+      ${TEST_TEXT}
+    `;
+    checkDifferences(multilineBeforeText, anotherMultilineAfterText, 3, 1);
+  });
+
+  it('should support real-world code diffs', () => {
+    const before = `
+      import { app, BrowserWindow } from 'electron';
+      import * as path from 'path';
+      import * as url from 'url';
+    `;
+    const after = `
+      import { app, BrowserWindow } from 'electron';
+      import { join } from 'path';
+      import * as url from 'url';
+    `;
+    const codeDifferences = getDifferenceBetweenSources(before, after);
+    console.debug(codeDifferences);
   });
 });
