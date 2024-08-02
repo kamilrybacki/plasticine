@@ -14,4 +14,18 @@ describe('Transition', () => {
         { text: TEST_ACCENT_CHAR, operation: 'add' }
       ])
   });
+
+  [
+    [ 'Hello, World', 'Hello, World!', 1 ],
+    [ 'Hello, World!', 'Hello, World', 1 ],
+    [ 'Hello, World', 'Hello, World!!', 2 ],
+    [ 'Hello, World!!', 'Hello, World', 2 ],
+    [ 'Hello, World!!', 'Hello, World!?!', 1 ],
+  ].forEach(([before, after, frames]) => {
+    it(`should calculate ${frames} frames for transition from "${before}" to "${after}"`, () => {
+      const transition = new Transition(before as string, after as string);
+      expect(transition.frames).toBe(frames);
+    });
+  }
+  );
 });
