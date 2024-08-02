@@ -10,8 +10,8 @@ describe('Transition', () => {
     const transition = new Transition(TEST_TEXT, TEST_TEXT + TEST_ACCENT_CHAR);
     expect(transition.diff as Difference[])
       .toEqual([
-        { text: TEST_TEXT, changed: false },
-        { text: TEST_ACCENT_CHAR, changed: true }
+        { text: TEST_TEXT, operation: 'leave' },
+        { text: TEST_ACCENT_CHAR, operation: 'add' }
       ])
   });
 });

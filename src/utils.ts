@@ -2,7 +2,7 @@ import * as Diff from 'diff';
 
 export type Difference = {
   text: string
-  changed: 'remove' | 'add' | 'leave'
+  operation: 'remove' | 'add' | 'leave'
 }
 
 export const getDifferenceBetweenSources = (before: string, after: string): Difference[] => {
@@ -11,7 +11,7 @@ export const getDifferenceBetweenSources = (before: string, after: string): Diff
     .map((difference: Diff.Change) => { 
       return {
         text: difference.value,
-        changed: difference.added ? 'add' : difference.removed ? 'remove' : 'leave'
+        operation: difference.added ? 'add' : difference.removed ? 'remove' : 'leave'
       } as Difference
     })
     .filter((difference: Difference) => difference.text.length > 0);
