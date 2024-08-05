@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { hashFromString, Difference, getDifferenceBetweenSources } from '@main/utils';
+import { hashFromString, Diffs } from '@main/utils';
 
 describe('Hashing from string', () => {
   const TEST_STRING = new Date().toUTCString();
@@ -22,7 +22,7 @@ describe('Differences between texts', () => {
   const TEST_ACCENT_CHAR = '!';
 
   it('should return empty array for unchanged text', () => {
-    const sameTextDifferences= getDifferenceBetweenSources(TEST_TEXT, TEST_TEXT);
+    const sameTextDifferences = Diffs.getDifferences(TEST_TEXT, TEST_TEXT);
     expect(sameTextDifferences.length).toEqual(1);
     expect(sameTextDifferences.slice(-1).pop()?.text).toEqual(TEST_TEXT);
   });
@@ -33,8 +33,7 @@ describe('Differences between texts', () => {
     expectedLength: number,
     expectedAccentCharacterPosition: number
   ) => {
-    const differences = getDifferenceBetweenSources(firstText, secondText);
-    console.debug(differences);
+    const differences = Diffs.getDifferences(firstText, secondText);
     expect(differences.length).toEqual(expectedLength);
     expect(
       differences
@@ -74,20 +73,5 @@ describe('Differences between texts', () => {
       ${TEST_TEXT}
     `;
     checkDifferences(multilineBeforeText, anotherMultilineAfterText, 3, 1);
-  });
-
-  it('should support real-world code diffs', () => {
-    const before = `
-      import { app, BrowserWindow } from 'electron';
-      import * as path from 'path';
-      import * as url from 'url';
-    `;
-    const after = `
-      import { app, BrowserWindow } from 'electron';
-      import { join } from 'path';
-      import * as url from 'url';
-    `;
-    const codeDifferences = getDifferenceBetweenSources(before, after);
-    console.debug(codeDifferences);
   });
 });
