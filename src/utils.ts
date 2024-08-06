@@ -13,6 +13,11 @@ export namespace Diffs {
       this.operation = change.added ? 'add' : change.removed ? 'remove' : 'leave';
       this.changed = this.operation != 'leave';
     }
+
+    nullify(): void {
+      this.changed = false;
+      this.operation = 'leave';
+    };
   };
 
   export const fromDict = (text: string, operation: Operation): Difference => {

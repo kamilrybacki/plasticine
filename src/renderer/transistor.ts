@@ -67,23 +67,44 @@ export class Transistor {
   };
 
   private advanceToNextSourceVersion(): void {
-    let changeApplied: boolean = false;
-    this.currentSource = this.transitions
+    this.currentFrame++; 
+    const transitionIndex = this._findNextTransition();
+
+    this.currentSource = this._transitions
       .reduce((
         newSource: string,
-        difference: Diffs.Difference
+        difference: Diffs.Difference,
+        index: number
       ) => {
-        changeApplied = changeApplied || difference.changed;
-        switch (difference.operation) {
-          case 'add': newSource += difference.text.substring(
-            0, difference.text.length * +changeApplied
-          )
-          case 'remove': newSource = newSource.substring(
-            0, newSource.length - difference.text.length * +changeApplied
-          )
-          case 'leave': newSource += difference.text
+        if (index == transitionIndex) {
+          this._applyTransition(newSource, difference);
+          this._transitions[transitionIndex].nullify();
+        } else { 
+          newSource += difference.text;
         };
         return newSource;
       }, '');
+  };
+
+  private _findNextTransition(): number {
+    let changeApplied: boolean = false;
+    let transitionIndex: number = -1;
+    while (!changeApplied) {
+      transitionIndex++;
+      changeApplied = this._transitions[transitionIndex].changed;
+    };
+    return transitionIndex;
+  };
+
+  private _applyTransition(
+    source: string,
+    difference: Diffs.Difference,
+  ): void {
+    switch (difference.operation) {
+      case 'add': source += difference.text;
+      case 'remove': source = source.substring(
+        0, source.length - difference.text.length
+      )
+    };
   };
 };
