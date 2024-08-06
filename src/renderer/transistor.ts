@@ -60,51 +60,51 @@ export class Transistor {
   };
 
   next(): string {
-    if (this.currentFrame < this.totalTransitionsNeeded) {
-      this.advanceToNextSourceVersion();
-    }
+    if (this.currentSource != this.sourceAfter) {
+      this.currentSource = this.advanceToNextSourceVersion();
+    };
     return this.currentSource;
   };
 
-  private advanceToNextSourceVersion(): void {
-    this.currentFrame++; 
-    const transitionIndex = this._findNextTransition();
-
-    this.currentSource = this._transitions
-      .reduce((
-        newSource: string,
-        difference: Diffs.Difference,
-        index: number
-      ) => {
-        if (index == transitionIndex) {
-          this._applyTransition(newSource, difference);
-          this._transitions[transitionIndex].nullify();
-        } else { 
-          newSource += difference.text;
+  private advanceToNextSourceVersion(): string {
+    const foundTransition = this._findNextTransition();
+    return foundTransition ? this._transitions
+      .reduce((next: string, difference: Diffs.Difference) => {
+        if (difference == foundTransition) {
+          next = this._applyTransition(next, difference);
+          difference.nullify();
+        } else {
+          next = next.concat(
+            difference.text.repeat(+!difference.changed)
+          );
         };
-        return newSource;
-      }, '');
+        return next;
+      }, '') : this.currentSource;
   };
 
-  private _findNextTransition(): number {
-    let changeApplied: boolean = false;
-    let transitionIndex: number = -1;
-    while (!changeApplied) {
-      transitionIndex++;
-      changeApplied = this._transitions[transitionIndex].changed;
+  private _findNextTransition(): Diffs.Difference | null {
+    let foundTransition: Diffs.Difference | null = null;
+    let transitionIndex = 0;
+    while (!foundTransition) {
+      foundTransition = this._transitions[transitionIndex].changed
+        ? this._transitions[transitionIndex]
+        : null;
+      if (!foundTransition) { transitionIndex++ };
+      if (transitionIndex >= this._transitions.length) { break; }
     };
-    return transitionIndex;
+    return foundTransition;
   };
 
   private _applyTransition(
     source: string,
     difference: Diffs.Difference,
-  ): void {
+  ): string {
     switch (difference.operation) {
-      case 'add': source += difference.text;
+      case 'add': source = source.concat(difference.text)
       case 'remove': source = source.substring(
         0, source.length - difference.text.length
       )
     };
+    return source;
   };
 };

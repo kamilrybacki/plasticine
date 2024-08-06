@@ -51,10 +51,11 @@ describe('Transistor', () => {
     expect(transistor.currentSource).toEqual(initialText);
 
     let transitionsCounter = 0;
-    while (transitionsCounter <= transistor.totalTransitionsNeeded) {
-      transistor.next();
+    let currentSource = initialText;
+    while (transitionsCounter < transistor.totalTransitionsNeeded) {
+      currentSource = transistor.next();
       transitionsCounter++;
     };
-    expect(transistor.currentSource).toEqual(finalText);
+    expect(currentSource).toEqual(finalText);
   });
 });
