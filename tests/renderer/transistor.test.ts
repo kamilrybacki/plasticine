@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 import { Diffs } from '@main/utils';
-import { Transistor } from '@renderer/transistor';
+import Transistor from '@renderer/transistor';
 
 describe('Transistor', () => {
   const TEST_TEXT = 'Hello, World';

@@ -1,6 +1,6 @@
 import { Diffs } from "@main/utils";
 
-export class Transistor {
+export default class Transistor {
   public readonly sourceBefore: string;
   public readonly sourceAfter: string;
   public readonly totalTransitionsNeeded: number;
