@@ -62,7 +62,6 @@ export class Transistor {
   next(): string {
     if (this.currentSource != this.sourceAfter) {
       this.currentSource = this.advanceToNextSourceVersion();
-      console.log(this.currentSource);
     };
     return this.currentSource;
   };
