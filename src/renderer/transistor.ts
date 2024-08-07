@@ -62,6 +62,7 @@ export class Transistor {
   next(): string {
     if (this.currentSource != this.sourceAfter) {
       this.currentSource = this.advanceToNextSourceVersion();
+      console.log(this.currentSource);
     };
     return this.currentSource;
   };
@@ -100,10 +101,16 @@ export class Transistor {
     difference: Diffs.Difference,
   ): string {
     switch (difference.operation) {
-      case 'add': source = source.concat(difference.text)
-      case 'remove': source = source.substring(
-        0, source.length - difference.text.length
-      )
+      case 'add': {
+        source = source.concat(difference.text);
+        break;
+      }
+      case 'remove': {
+          source = source.substring(
+          0, source.length - difference.text.length
+        );
+        break;
+      };
     };
     return source;
   };

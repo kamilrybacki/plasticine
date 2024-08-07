@@ -29,12 +29,18 @@ describe('Transistor', () => {
   });
 
   const expectedTransitionsResults: string[] = [
-    'functionName(argument: ArgType): RetValType {}',
-    'c functionName(argument: ArgType): RetValType {}',
-    'co functionName(argument: ArgType): RetValType {}',
-    'con functionName(argument: ArgType): RetValType {}',
-    'cons functionName(argument: ArgType): RetValType {}',
+    'cfunctionName(argument: ArgType): RetValType {}',
+    'cofunctionName(argument: ArgType): RetValType {}',
+    'confunctionName(argument: ArgType): RetValType {}',
+    'consfunctionName(argument: ArgType): RetValType {}',
+    'constfunctionName(argument: ArgType): RetValType {}',
     'const functionName(argument: ArgType): RetValType {}',
+    'const functionName (argument: ArgType): RetValType {}',
+    'const functionName =(argument: ArgType): RetValType {}',
+    'const functionName = (argument: ArgType): RetValType {}',
+    'const functionName = (argument: ArgType): RetValType ={}',
+    'const functionName = (argument: ArgType): RetValType =>{}',
+    'const functionName = (argument: ArgType): RetValType => {}'
   ]
 
   it('should advance through transitions', () => {
@@ -42,20 +48,10 @@ describe('Transistor', () => {
     const finalText = 'const functionName = (argument: ArgType): RetValType => {}';
     const transistor = new Transistor(initialText, finalText);
     expect(transistor.currentSource).toEqual(initialText);
-  });
-
-  it('should advance through all transitions', () => {
-    const initialText = 'functionName(argument: ArgType): RetValType {}';
-    const finalText = 'const functionName = (argument: ArgType): RetValType => {}';
-    const transistor = new Transistor(initialText, finalText);
-    expect(transistor.currentSource).toEqual(initialText);
-
-    let transitionsCounter = 0;
-    let currentSource = initialText;
-    while (transitionsCounter < transistor.totalTransitionsNeeded) {
-      currentSource = transistor.next();
-      transitionsCounter++;
-    };
-    expect(currentSource).toEqual(finalText);
+    expectedTransitionsResults
+      .forEach((expectedText: string) => {
+        const nextText = transistor.next();
+        expect(nextText).toEqual(expectedText);
+      });
   });
 });

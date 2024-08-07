@@ -15,12 +15,12 @@ export class CodeSnippet {
     language: string,
   ) {
     this.lines = source.trim().length > 0 ? CodeSnippet
-      .applyHighlighting(source, language)
+      .highlight(source, language)
       .split('\n') : [];
     this.language = language;
   };
 
-  static applyHighlighting = (
+  static highlight = (
     source: string,
     language: string
   ): string => {
@@ -42,7 +42,7 @@ export class CodeSnippet {
 
   update(newSource: string): void {
     this.lines = CodeSnippet
-      .applyHighlighting(newSource, this.language || FALLBACK_LANGUAGE)
+      .highlight(newSource, this.language || FALLBACK_LANGUAGE)
       .split('\n');
     this._wasUpdated = true;
   };

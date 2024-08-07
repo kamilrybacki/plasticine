@@ -29,7 +29,7 @@ describe('CodeSnippet', () => {
   it("should be able to apply syntax highlighting to a code snippet", () => {
     const source = 'const name = "Satori";';
     const language = "javascript";
-    const highlightedSource = CodeSnippet.applyHighlighting(source, language);
+    const highlightedSource = CodeSnippet.highlight(source, language);
 
     expect(highlightedSource).toContain("const");
     expect(highlightedSource).toContain("name");
@@ -39,7 +39,7 @@ describe('CodeSnippet', () => {
   it('should be able to update its code', () => {
     const newSnippet = makeTestSnippet();
     const newCode = 'console.log("Hello, world!")';
-    const expectedCode = CodeSnippet.applyHighlighting(newCode, testLanguage);
+    const expectedCode = CodeSnippet.highlight(newCode, testLanguage);
 
     newSnippet.update(newCode);
     const firstLine = newSnippet.render()[0];
