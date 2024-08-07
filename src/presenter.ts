@@ -3,7 +3,7 @@ import { CodeSnippet } from "@main/markup/snippet";
 
 const DEFAULT_CODE_SNIPPET_LAYOUT = 'templates/code.ejs';
 
-class Presenter {
+export default class Presenter {
   name: string;
   frames: string[] = [];
   readonly layout: string;
@@ -29,5 +29,3 @@ class Presenter {
       });
   };
 };
-
-export { Presenter };

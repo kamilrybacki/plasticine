@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { Presenter } from '@main/presenter';
+import Presenter from '@main/presenter';
 
 describe('Presenter structure', () => {
     const presenter = new Presenter('John Doe');
