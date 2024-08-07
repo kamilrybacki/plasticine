@@ -1,49 +1,32 @@
 import { EJS } from "@markup/ejs";
-import { CodeSnapshot } from "@main/markup/snapshot";
 import { CodeSnippet } from "@main/markup/snippet";
-import { Transistor } from "@renderer/transistor";
 
 const DEFAULT_CODE_SNIPPET_LAYOUT = 'templates/code.ejs';
 
 class Presenter {
-  private _name: string;
-  private _snapshots: CodeSnapshot[];
-  private _currentFrame: CodeSnapshot;
+  frames: string[];
+  currentFrame: string;
+  name: string;
 
   constructor(name: string) {
-    this._name = name;
-    this._snapshots = [];
-    this._currentFrame = CodeSnapshot.empty();
-  }
+    this.name = name;
+    this.frames = [];
+    this.currentFrame = '';
+  };
 
-  get name(): string {
-    return this._name;
-  }
+  addFrame(source: string, language: string): void {};
 
-  get frames(): CodeSnapshot[] {
-    return this._snapshots;
-  }
-
-  next(): void {
-    this._snapshots.push(this._currentFrame);
-    this._currentFrame = CodeSnapshot.empty();
-  }
-
-  async renderSnippet(
+  async render(
     layout: string = DEFAULT_CODE_SNIPPET_LAYOUT,
     source: string,
     language: string
-  ): Promise<CodeSnippet> {
-    const highlightedCode = CodeSnippet.highlight(source, language);
+  ): Promise<string> {
     return await EJS
       .render(layout, {
-        code: highlightedCode,
-        name: this._name,
-      })
-      .then((renderedMarkup: string) => {
-        return CodeSnippet.empty();
+        code: new CodeSnippet(source, language).lines,
+        name: this.name,
       });
-  }
+  };
 };
 
 export { Presenter };
