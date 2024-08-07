@@ -1,9 +1,9 @@
 <main>
-  <span
-    class="<%if (title.length > 0) { %>hidden<% } %> <%= titleStyle %>"
-  >
-    <%= title %>
-  </span>
+  <%if (title.length > 0) { -%>
+    <h1 class="<%= titleStyle %>">
+      <%= title %>
+    </h1>
+  <% } -%>
   <pre>
     <code>
       <%= code %>
